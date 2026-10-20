@@ -18,7 +18,7 @@
       padding: 2rem 1rem;
     }
     .app {
-      max-width: 1400px;
+      max-width: 1600px;
       width: 100%;
       background: white;
       border-radius: 2rem;
@@ -127,7 +127,7 @@
       padding: 0;
     }
     .matrix-table input {
-      width: 90px;
+      width: 70px;
       padding: 0.7rem 0.4rem;
       border: 1.5px solid #cbd5e1;
       border-radius: 1.2rem;
@@ -206,13 +206,71 @@
       color: #0f172a;
       font-size: 1.05rem;
     }
+    
+    .step-body {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      align-items: flex-start;
+    }
     .matrix-display {
       display: flex;
       flex-direction: column;
       gap: 0.7rem;
       overflow-x: auto;
       padding: 0.3rem 0;
+      flex: 1;
+      min-width: 300px;
     }
+    .calc-details {
+      flex: 1;
+      min-width: 320px;
+      background: #f8fafc;
+      border-radius: 1rem;
+      padding: 1rem 1.2rem;
+      border: 1px dashed #cbd5e1;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: #334155;
+    }
+    .calc-title {
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.8rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .calc-block {
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 0.8rem;
+    }
+    .calc-block:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .calc-row-label {
+      font-weight: 600;
+      color: #854d0e;
+      margin-bottom: 0.3rem;
+    }
+    .calc-cols {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .calc-item {
+      background: white;
+      padding: 0.4rem 0.6rem;
+      border-radius: 0.5rem;
+      border: 1px solid #e2e8f0;
+      font-size: 0.8rem;
+      word-break: break-all;
+    }
+    
     .matrix-row {
       display: flex;
       align-items: center;
@@ -226,7 +284,7 @@
       flex-wrap: wrap;
     }
     .matrix-cell {
-      min-width: 75px;
+      min-width: 60px;
       text-align: center;
       font-weight: 500;
       color: #0f172a;
@@ -236,6 +294,7 @@
       border: 1px solid #e2e8f0;
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
       font-size: 0.9rem;
+      position: relative;
     }
     .matrix-cell.augment {
       background: #f1f5f9;
@@ -281,21 +340,29 @@
     .op-list .op-statement {
       margin-left: 0;
     }
+    
     .final-message {
       background: #dcfce7;
       color: #166534;
-      padding: 1rem 1.8rem;
-      border-radius: 2rem;
+      padding: 1.2rem 1.8rem;
+      border-radius: 1.5rem;
       font-weight: 500;
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       border-left: 6px solid #22c55e;
-      font-size: 1rem;
+      font-size: 1.05rem;
+      line-height: 1.5;
     }
     .final-message.error {
       background: #fee2e2;
       color: #991b1b;
       border-left-color: #ef4444;
     }
+    .final-message.warning {
+      background: #fef9c3;
+      color: #854d0e;
+      border-left-color: #eab308;
+    }
+    
     .error-msg {
       background: #fee2e2;
       color: #991b1b;
@@ -355,29 +422,165 @@
       margin-bottom: 0.8rem;
       font-size: 1.05rem;
     }
+
+    /* Visual Partitioning Grid Styles */
+    .partition-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      margin: 1rem 0;
+    }
+    .partition-matrix {
+      position: relative;
+      display: inline-block;
+      padding: 1rem;
+    }
+    .partition-bracket-left, .partition-bracket-right {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 10px;
+      border: 3px solid #334155;
+    }
+    .partition-bracket-left {
+      left: 0;
+      border-right: none;
+      border-radius: 5px 0 0 5px;
+    }
+    .partition-bracket-right {
+      right: 0;
+      border-left: none;
+      border-radius: 0 5px 5px 0;
+    }
+    .partition-grid {
+      display: grid;
+      gap: 0.5rem;
+      justify-items: center;
+    }
+    .partition-cell {
+      width: 45px;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #0f172a;
+      position: relative;
+    }
+    /* Dotted lines to show partition boundaries */
+    .partition-cell.p-right::after {
+      content: '';
+      position: absolute;
+      right: -6px;
+      top: -2px;
+      bottom: -2px;
+      border-right: 2px dashed #2563eb;
+      z-index: 10;
+    }
+    .partition-cell.p-bottom::before {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: -2px;
+      right: -2px;
+      border-bottom: 2px dashed #2563eb;
+      z-index: 10;
+    }
+    .block-label {
+      position: absolute;
+      color: #2563eb;
+      font-size: 0.75rem;
+      font-weight: 800;
+      background: white;
+      padding: 0 4px;
+      border-radius: 4px;
+      border: 1px solid #bfdbfe;
+    }
+
+    /* Whiteboard Math Styles */
+    .math-equation-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: #f8fafc;
+      border-radius: 1rem;
+      border: 1px solid #e2e8f0;
+    }
+    .math-matrix {
+      display: flex;
+      align-items: center;
+    }
+    .math-bracket {
+      font-size: 4rem;
+      font-weight: 300;
+      color: #334155;
+      line-height: 0.5;
+      transform: scaleY(1.3);
+      user-select: none;
+    }
+    .math-grid {
+      display: grid;
+      gap: 0.8rem;
+      padding: 0.5rem 0.8rem;
+    }
+    .math-cell {
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.95rem;
+      color: #0f172a;
+    }
+    .math-op {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #64748b;
+      margin: 0 0.5rem;
+    }
+    .math-eq {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #0f172a;
+      margin: 0 0.5rem;
+    }
+    .math-result {
+      font-weight: 700;
+      color: #166534;
+    }
+    .math-step-row {
+      margin-top: 1rem;
+      padding-left: 2rem;
+    }
   </style>
 </head>
 <body>
 <div class="app">
   <h1>🧮 Matrix Solver <span>step by step · rational</span></h1>
-  <div class="sub">Echelon · Reduced Echelon · Rank · Inverse · Gauss Elimination · Gauss-Jordan</div>
+  <div class="sub">Echelon · Reduced Echelon · Rank · Consistency & Inconsistency · Inverse · Gauss Elimination · Gauss-Jordan · Product AxB</div>
 
   <div class="card">
     <div class="row-flex">
       <div class="size-input">
-        <label>Rows</label>
+        <label>Rows (A)</label>
         <input type="number" id="rows" min="1" max="8" value="3">
       </div>
       <div class="size-input">
-        <label>Cols</label>
+        <label>Cols (A) / Rows (B)</label>
         <input type="number" id="cols" min="1" max="8" value="3">
+      </div>
+      <div class="size-input">
+        <label>Cols (B)</label>
+        <input type="number" id="colsB" min="1" max="8" value="3" style="display: none;">
       </div>
       <button class="btn" id="setOrderBtn">Set order & build grid</button>
       <button class="example-btn" id="exampleBtn">Load example (3×4)</button>
       <button class="example-btn" id="exampleInvBtn">Load 3×3 (inverse demo)</button>
     </div>
     <div class="info-banner" id="infoBanner">
-      💡 For <b>Gauss Elimination</b> & <b>Gauss-Jordan</b>, the last column is the <b>RHS (augmented)</b>. For <b>Inverse</b>, provide a <b>square</b> matrix — the identity will be attached automatically.
+      💡 For <b>Gauss Elimination</b>, <b>Gauss-Jordan</b>, and <b>Consistency</b>, the last column is treated as the <b>RHS (augmented)</b>.
     </div>
     <div id="matrixInputArea" style="margin-top:0.8rem;"></div>
   </div>
@@ -388,9 +591,11 @@
       <label><input type="radio" name="method" value="echelon" checked> Echelon Form</label>
       <label><input type="radio" name="method" value="reducedEchelon"> Reduced Echelon</label>
       <label><input type="radio" name="method" value="rank"> Rank of Matrix</label>
+      <label><input type="radio" name="method" value="consistency"> Consistency & Inconsistency</label>
       <label><input type="radio" name="method" value="inverse"> Inverse of Matrix</label>
       <label><input type="radio" name="method" value="gaussElim"> Gauss Elimination</label>
       <label><input type="radio" name="method" value="gaussJordan"> Gauss-Jordan</label>
+      <label><input type="radio" name="method" value="product"> Product (AxB)</label>
     </div>
     <div style="margin-top:1rem;">
       <button class="btn btn-primary" id="solveBtn">▶ Solve with steps</button>
@@ -401,7 +606,7 @@
   <div id="resultsSection" style="margin-top:1.5rem;">
     <div class="text-muted">Set order, enter matrix values, then choose a method.</div>
   </div>
-  <div class="footer-note">All calculations keep exact rational values. Row operations are batched for clarity.</div>
+  <div class="footer-note">All calculations keep exact rational values. Rough working is shown on the right.</div>
 </div>
 
 <script>
@@ -409,6 +614,7 @@
     // ---------- DOM refs ----------
     const rowsInput = document.getElementById('rows');
     const colsInput = document.getElementById('cols');
+    const colsBInput = document.getElementById('colsB');
     const setOrderBtn = document.getElementById('setOrderBtn');
     const exampleBtn = document.getElementById('exampleBtn');
     const exampleInvBtn = document.getElementById('exampleInvBtn');
@@ -421,6 +627,7 @@
 
     let currentRows = 0;
     let currentCols = 0;
+    let currentColsB = 0;
 
     // ---------- RATIONAL HELPERS ----------
     function gcd(a, b) {
@@ -436,6 +643,7 @@
       const g = gcd(n, d);
       return { n: n / g, d: d / g };
     }
+    function addRat(a, b) { return makeRat(a.n * b.d + b.n * a.d, a.d * b.d); }
     function subRat(a, b) { return makeRat(a.n * b.d - b.n * a.d, a.d * b.d); }
     function mulRat(a, b) { return makeRat(a.n * b.n, a.d * b.d); }
     function divRat(a, b) {
@@ -488,20 +696,36 @@
       return mat.map(row => row.map(cell => ({ n: cell.n, d: cell.d })));
     }
 
-    // identityColorCols: optional set of column indices to highlight as identity (for inverse method)
-    function renderMatrixWithOps(matrix, opsPerRow = null, augIdx = null, identityCols = null) {
-      const container = document.createElement('div');
-      container.className = 'matrix-display';
+    function renderStep(step) {
+      const card = document.createElement('div');
+      card.className = 'step-card';
 
-      for (let r = 0; r < matrix.length; r++) {
+      const header = document.createElement('div');
+      header.className = 'step-header';
+      const badge = document.createElement('span');
+      badge.className = 'step-badge';
+      badge.textContent = `STEP ${step.stepIndex}`;
+      const title = document.createElement('span');
+      title.className = 'step-title';
+      title.textContent = step.title;
+      header.appendChild(badge);
+      header.appendChild(title);
+      card.appendChild(header);
+
+      const body = document.createElement('div');
+      body.className = 'step-body';
+
+      const matrixDiv = document.createElement('div');
+      matrixDiv.className = 'matrix-display';
+
+      for (let r = 0; r < step.matrix.length; r++) {
         const rowDiv = document.createElement('div');
         rowDiv.className = 'matrix-row';
-
         const valsDiv = document.createElement('div');
         valsDiv.className = 'matrix-values';
 
-        for (let c = 0; c < matrix[r].length; c++) {
-          if (augIdx !== null && c === augIdx) {
+        for (let c = 0; c < step.matrix[r].length; c++) {
+          if (step.augIdx !== null && c === step.augIdx) {
             const sep = document.createElement('span');
             sep.className = 'matrix-sep';
             sep.textContent = '|';
@@ -509,17 +733,15 @@
           }
           const cell = document.createElement('span');
           cell.className = 'matrix-cell';
-          if (augIdx !== null && c === augIdx) cell.classList.add('augment');
-          // Highlight identity columns (left side of inverse RREF)
-          if (identityCols && identityCols.has(c)) cell.classList.add('identity');
-          cell.textContent = fmtRat(matrix[r][c]);
+          if (step.augIdx !== null && c === step.augIdx) cell.classList.add('augment');
+          if (step.identityCols && step.identityCols.has(c)) cell.classList.add('identity');
+          cell.textContent = fmtRat(step.matrix[r][c]);
           valsDiv.appendChild(cell);
         }
-
         rowDiv.appendChild(valsDiv);
 
-        if (opsPerRow && opsPerRow[r]) {
-          const ops = Array.isArray(opsPerRow[r]) ? opsPerRow[r] : [opsPerRow[r]];
+        if (step.ops && step.ops[r]) {
+          const ops = Array.isArray(step.ops[r]) ? step.ops[r] : [step.ops[r]];
           const opList = document.createElement('div');
           opList.className = 'op-list';
           ops.forEach(op => {
@@ -531,117 +753,53 @@
             }
           });
           rowDiv.appendChild(opList);
-        } else if (opsPerRow) {
+        } else if (step.ops) {
           const opSpan = document.createElement('span');
           opSpan.className = 'op-statement empty';
           opSpan.textContent = '—';
           rowDiv.appendChild(opSpan);
         }
 
-        container.appendChild(rowDiv);
+        matrixDiv.appendChild(rowDiv);
+      }
+      body.appendChild(matrixDiv);
+
+      if (step.calcDetails && step.calcDetails.length > 0) {
+        const calcDiv = document.createElement('div');
+        calcDiv.className = 'calc-details';
+        const calcTitle = document.createElement('div');
+        calcTitle.className = 'calc-title';
+        calcTitle.textContent = '🧮 Rough Working / Calculations';
+        calcDiv.appendChild(calcTitle);
+
+        step.calcDetails.forEach(block => {
+          const bDiv = document.createElement('div');
+          bDiv.className = 'calc-block';
+          const lbl = document.createElement('div');
+          lbl.className = 'calc-row-label';
+          lbl.textContent = block.rowLabel;
+          bDiv.appendChild(lbl);
+
+          const colsDiv = document.createElement('div');
+          colsDiv.className = 'calc-cols';
+          block.details.forEach(det => {
+            const item = document.createElement('div');
+            item.className = 'calc-item';
+            item.innerHTML = det; 
+            colsDiv.appendChild(item);
+          });
+          bDiv.appendChild(colsDiv);
+          calcDiv.appendChild(bDiv);
+        });
+
+        body.appendChild(calcDiv);
       }
 
-      return container;
+      card.appendChild(body);
+      return card;
     }
 
-    // ---------- GENERATE INPUT GRID ----------
-    function generateMatrixInput(rows, cols, fillExample = false, showAugSep = false, exampleType = 'default') {
-      currentRows = rows;
-      currentCols = cols;
-
-      const table = document.createElement('table');
-      table.className = 'matrix-table';
-
-      const defaultExample = [
-        ['2', '1', '-1', '8'],
-        ['-3', '-1', '2', '-11'],
-        ['-2', '1', '2', '-3']
-      ];
-      const inverseExample = [
-        ['2', '1', '1'],
-        ['1', '3', '2'],
-        ['1', '0', '0']
-      ];
-
-      const exampleVals = exampleType === 'inverse' ? inverseExample : defaultExample;
-
-      for (let r = 0; r < rows; r++) {
-        const tr = document.createElement('tr');
-        for (let c = 0; c < cols; c++) {
-          if (showAugSep && c === cols - 1 && cols > 1) {
-            const sepTd = document.createElement('td');
-            sepTd.className = 'augment-sep';
-            sepTd.textContent = '|';
-            tr.appendChild(sepTd);
-          }
-
-          const td = document.createElement('td');
-          const input = document.createElement('input');
-          input.type = 'text';
-          input.id = `cell-${r}-${c}`;
-          input.placeholder = '0';
-          input.value = '0';
-
-          if (fillExample && r < exampleVals.length && c < exampleVals[0].length) {
-            input.value = exampleVals[r][c];
-          }
-
-          input.addEventListener('focus', () => input.select());
-          td.appendChild(input);
-          tr.appendChild(td);
-        }
-        table.appendChild(tr);
-      }
-
-      matrixInputArea.innerHTML = '';
-      matrixInputArea.appendChild(table);
-      methodPanel.classList.remove('hidden');
-    }
-
-    function refreshInputGridForMethod() {
-      if (currentRows === 0) return;
-      const method = getSelectedMethod();
-      const showAugSep = (method === 'gaussElim' || method === 'gaussJordan');
-
-      const values = [];
-      for (let r = 0; r < currentRows; r++) {
-        const row = [];
-        for (let c = 0; c < currentCols; c++) {
-          const inp = document.getElementById(`cell-${r}-${c}`);
-          row.push(inp ? inp.value : '0');
-        }
-        values.push(row);
-      }
-
-      generateMatrixInput(currentRows, currentCols, false, showAugSep);
-
-      for (let r = 0; r < currentRows; r++) {
-        for (let c = 0; c < currentCols; c++) {
-          const inp = document.getElementById(`cell-${r}-${c}`);
-          if (inp) inp.value = values[r][c];
-        }
-      }
-    }
-
-    // ---------- READ MATRIX ----------
-    function readMatrix() {
-      const mat = [];
-      for (let r = 0; r < currentRows; r++) {
-        const row = [];
-        for (let c = 0; c < currentCols; c++) {
-          const input = document.getElementById(`cell-${r}-${c}`);
-          const raw = input.value.trim() || '0';
-          try {
-            row.push(parseRational(raw));
-          } catch (e) {
-            throw new Error(`Row ${r + 1}, Col ${c + 1}: ${e.message}`);
-          }
-        }
-        mat.push(row);
-      }
-      return mat;
-    }
-
+    // ---------- INPUT GRID LOGIC ----------
     function getSelectedMethod() {
       for (const radio of methodRadios) {
         if (radio.checked) return radio.value;
@@ -649,32 +807,552 @@
       return 'echelon';
     }
 
-    // ---------- SOLVE ----------
+    function updateInputVisibility() {
+      const method = getSelectedMethod();
+      const isProduct = (method === 'product');
+      
+      colsBInput.style.display = isProduct ? 'flex' : 'none';
+      
+      const labelColsA = document.querySelector('label[for="cols"]') || colsInput.previousElementSibling;
+      if (labelColsA) {
+        labelColsA.textContent = isProduct ? 'Cols (A) / Rows (B)' : 'Cols';
+      }
+    }
+
+    function generateMatrixInput(rows, cols, colsB, fillExample = false, showAugSep = false, exampleType = 'default') {
+      currentRows = rows;
+      currentCols = cols;
+      currentColsB = colsB;
+
+      const method = getSelectedMethod();
+      const isProduct = (method === 'product');
+
+      matrixInputArea.innerHTML = '';
+
+      if (isProduct) {
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.gap = '3rem';
+        wrapper.style.flexWrap = 'wrap';
+        wrapper.style.justifyContent = 'center';
+
+        // Matrix A
+        const wrapperA = document.createElement('div');
+        wrapperA.innerHTML = '<div style="text-align:center; font-weight:700; color:#0f172a; margin-bottom:0.5rem;">Matrix A</div>';
+        const tableA = document.createElement('table');
+        tableA.className = 'matrix-table';
+        for (let r = 0; r < rows; r++) {
+          const tr = document.createElement('tr');
+          for (let c = 0; c < cols; c++) {
+            const td = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `cellA-${r}-${c}`;
+            input.placeholder = '0';
+            input.value = '0';
+            if (fillExample) input.value = (r === c) ? '1' : '0';
+            input.addEventListener('focus', () => input.select());
+            td.appendChild(input);
+            tr.appendChild(td);
+          }
+          tableA.appendChild(tr);
+        }
+        wrapperA.appendChild(tableA);
+        wrapper.appendChild(wrapperA);
+
+        // Matrix B
+        const wrapperB = document.createElement('div');
+        wrapperB.innerHTML = '<div style="text-align:center; font-weight:700; color:#0f172a; margin-bottom:0.5rem;">Matrix B</div>';
+        const tableB = document.createElement('table');
+        tableB.className = 'matrix-table';
+        for (let r = 0; r < cols; r++) {
+          const tr = document.createElement('tr');
+          for (let c = 0; c < colsB; c++) {
+            const td = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `cellB-${r}-${c}`;
+            input.placeholder = '0';
+            input.value = '0';
+            if (fillExample) input.value = (r === c) ? '1' : '0';
+            input.addEventListener('focus', () => input.select());
+            td.appendChild(input);
+            tr.appendChild(td);
+          }
+          tableB.appendChild(tr);
+        }
+        wrapperB.appendChild(tableB);
+        wrapper.appendChild(wrapperB);
+
+        matrixInputArea.appendChild(wrapper);
+
+      } else {
+        const table = document.createElement('table');
+        table.className = 'matrix-table';
+
+        const defaultExample = [
+          ['2', '1', '-1', '8'],
+          ['-3', '-1', '2', '-11'],
+          ['-2', '1', '2', '-3']
+        ];
+        const inverseExample = [
+          ['2', '1', '1'],
+          ['1', '3', '2'],
+          ['1', '0', '0']
+        ];
+        const exampleVals = exampleType === 'inverse' ? inverseExample : defaultExample;
+
+        for (let r = 0; r < rows; r++) {
+          const tr = document.createElement('tr');
+          for (let c = 0; c < cols; c++) {
+            if (showAugSep && c === cols - 1 && cols > 1) {
+              const sepTd = document.createElement('td');
+              sepTd.className = 'augment-sep';
+              sepTd.textContent = '|';
+              tr.appendChild(sepTd);
+            }
+
+            const td = document.createElement('td');
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = `cell-${r}-${c}`;
+            input.placeholder = '0';
+            input.value = '0';
+
+            if (fillExample && r < exampleVals.length && c < exampleVals[0].length) {
+              input.value = exampleVals[r][c];
+            }
+
+            input.addEventListener('focus', () => input.select());
+            td.appendChild(input);
+            tr.appendChild(td);
+          }
+          table.appendChild(tr);
+        }
+        matrixInputArea.appendChild(table);
+      }
+      
+      methodPanel.classList.remove('hidden');
+    }
+
+    function refreshInputGridForMethod() {
+      if (currentRows === 0) return;
+      updateInputVisibility();
+      
+      const method = getSelectedMethod();
+      const showAugSep = (method === 'gaussElim' || method === 'gaussJordan' || method === 'consistency');
+      
+      let savedValues = [];
+      if (method !== 'product') {
+        for (let r = 0; r < currentRows; r++) {
+          const row = [];
+          for (let c = 0; c < currentCols; c++) {
+            const inp = document.getElementById(`cell-${r}-${c}`);
+            row.push(inp ? inp.value : '0');
+          }
+          savedValues.push(row);
+        }
+      }
+
+      generateMatrixInput(currentRows, currentCols, currentColsB, false, showAugSep);
+
+      if (method !== 'product' && savedValues.length > 0) {
+        for (let r = 0; r < currentRows; r++) {
+          for (let c = 0; c < currentCols; c++) {
+            const inp = document.getElementById(`cell-${r}-${c}`);
+            if (inp && savedValues[r] && savedValues[r][c]) inp.value = savedValues[r][c];
+          }
+        }
+      }
+    }
+
+    // ---------- READ MATRICES ----------
+    function readMatrix() {
+      const mat = [];
+      for (let r = 0; r < currentRows; r++) {
+        const row = [];
+        for (let c = 0; c < currentCols; c++) {
+          const input = document.getElementById(`cell-${r}-${c}`);
+          const raw = input.value.trim() || '0';
+          try { row.push(parseRational(raw)); } catch (e) { throw new Error(`Row ${r + 1}, Col ${c + 1}: ${e.message}`); }
+        }
+        mat.push(row);
+      }
+      return mat;
+    }
+
+    function readMatrixA() {
+      const mat = [];
+      for (let r = 0; r < currentRows; r++) {
+        const row = [];
+        for (let c = 0; c < currentCols; c++) {
+          const input = document.getElementById(`cellA-${r}-${c}`);
+          const raw = input.value.trim() || '0';
+          try { row.push(parseRational(raw)); } catch (e) { throw new Error(`Matrix A, Row ${r + 1}, Col ${c + 1}: ${e.message}`); }
+        }
+        mat.push(row);
+      }
+      return mat;
+    }
+
+    function readMatrixB() {
+      const mat = [];
+      for (let r = 0; r < currentCols; r++) {
+        const row = [];
+        for (let c = 0; c < currentColsB; c++) {
+          const input = document.getElementById(`cellB-${r}-${c}`);
+          const raw = input.value.trim() || '0';
+          try { row.push(parseRational(raw)); } catch (e) { throw new Error(`Matrix B, Row ${r + 1}, Col ${c + 1}: ${e.message}`); }
+        }
+        mat.push(row);
+      }
+      return mat;
+    }
+
+    // ---------- PRODUCT (BLOCK MULTIPLICATION) ----------
+    function solveProduct() {
+      const A = readMatrixA();
+      const B = readMatrixB();
+      const m = currentRows;
+      const n = currentCols;
+      const p = currentColsB;
+
+      const midM = Math.ceil(m / 2);
+      const midN = Math.ceil(n / 2);
+      const midP = Math.ceil(p / 2);
+
+      function getBlock(mat, rStart, rEnd, cStart, cEnd) {
+        const block = [];
+        for (let r = rStart; r < rEnd; r++) {
+          const row = [];
+          for (let c = cStart; c < cEnd; c++) row.push(mat[r][c]);
+          block.push(row);
+        }
+        return block;
+      }
+
+      const A11 = getBlock(A, 0, midM, 0, midN);
+      const A12 = getBlock(A, 0, midM, midN, n);
+      const A21 = getBlock(A, midM, m, 0, midN);
+      const A22 = getBlock(A, midM, m, midN, n);
+
+      const B11 = getBlock(B, 0, midN, 0, midP);
+      const B12 = getBlock(B, 0, midN, midP, p);
+      const B21 = getBlock(B, midN, n, 0, midP);
+      const B22 = getBlock(B, midN, n, midP, p);
+
+      // Function to multiply blocks and generate raw data
+      function multiplyBlocksData(X, Y, labelX, labelY) {
+        const rX = X.length;
+        const cX = X[0] ? X[0].length : 0;
+        const rY = Y.length;
+        const cY = Y[0] ? Y[0].length : 0;
+        if (cX !== rY) throw new Error('Dimension mismatch in block multiplication');
+        
+        const res = [];
+        const eqs = [];
+        for (let i = 0; i < rX; i++) {
+          res.push([]);
+          eqs.push([]);
+          for (let j = 0; j < cY; j++) {
+            let sum = makeRat(0n, 1n);
+            const terms = [];
+            for (let k = 0; k < cX; k++) {
+              const prod = mulRat(X[i][k], Y[k][j]);
+              sum = addRat(sum, prod);
+              terms.push(`(${fmtRat(X[i][k])}×${fmtRat(Y[k][j])})`);
+            }
+            res[i].push(sum);
+            eqs[i].push(terms.join(' + '));
+          }
+        }
+        return { A: X, B: Y, res, eqs, label: `${labelX} × ${labelY}` };
+      }
+
+      // Function to add blocks and generate raw data
+      function addBlocksData(X, Y, labelX, labelY) {
+        const rX = X.length;
+        const cX = X[0] ? X[0].length : 0;
+        
+        const res = [];
+        const eqs = [];
+        for (let i = 0; i < rX; i++) {
+          res.push([]);
+          eqs.push([]);
+          for (let j = 0; j < cX; j++) {
+            const sum = addRat(X[i][j], Y[i][j]);
+            res[i].push(sum);
+            eqs[i].push(`${fmtRat(X[i][j])} + ${fmtRat(Y[i][j])}`);
+          }
+        }
+        return { A: X, B: Y, res, eqs, label: `${labelX} + ${labelY}` };
+      }
+
+      // Compute intermediate products
+      const P1 = multiplyBlocksData(A11, B11, 'A11', 'B11');
+      const P2 = multiplyBlocksData(A12, B21, 'A12', 'B21');
+      const P3 = multiplyBlocksData(A11, B12, 'A11', 'B12');
+      const P4 = multiplyBlocksData(A12, B22, 'A12', 'B22');
+      const P5 = multiplyBlocksData(A21, B11, 'A21', 'B11');
+      const P6 = multiplyBlocksData(A22, B21, 'A22', 'B21');
+      const P7 = multiplyBlocksData(A21, B12, 'A21', 'B12');
+      const P8 = multiplyBlocksData(A22, B22, 'A22', 'B22');
+
+      // Compute final quadrants
+      const C11 = addBlocksData(P1.res, P2.res, 'P1', 'P2');
+      const C12 = addBlocksData(P3.res, P4.res, 'P3', 'P4');
+      const C21 = addBlocksData(P5.res, P6.res, 'P5', 'P6');
+      const C22 = addBlocksData(P7.res, P8.res, 'P7', 'P8');
+
+      // Reconstruct final matrix C
+      const C = Array.from({length: m}, () => Array.from({length: p}, () => makeRat(0n, 1n)));
+      for (let r = 0; r < midM; r++) {
+        for (let c = 0; c < midP; c++) C[r][c] = C11.res[r][c];
+        for (let c = midP; c < p; c++) C[r][c] = C12.res[r][c - midP];
+      }
+      for (let r = midM; r < m; r++) {
+        for (let c = 0; c < midP; c++) C[r][c] = C21.res[r - midM][c];
+        for (let c = midP; c < p; c++) C[r][c] = C22.res[r - midM][c - midP];
+      }
+
+      // --- RENDER RESULTS ---
+      function renderPartitionedHTML(mat, rowSplit, colSplit, prefix) {
+        const rCount = mat.length;
+        const cCount = mat[0] ? mat[0].length : 0;
+        
+        let html = `<div class="partition-wrapper">`;
+        html += `<div class="partition-matrix">`;
+        html += `<div class="partition-bracket-left"></div>`;
+        html += `<div class="partition-grid" style="grid-template-columns: repeat(${cCount}, 1fr);">`;
+        
+        for (let r = 0; r < rCount; r++) {
+          for (let c = 0; c < cCount; c++) {
+            let cls = "partition-cell";
+            if (c === colSplit - 1 && colSplit < cCount) cls += " p-right";
+            if (r === rowSplit - 1 && rowSplit < rCount) cls += " p-bottom";
+            
+            let labelHtml = '';
+            if (c === 0 && r === 0) labelHtml = `<div class="block-label" style="top:-8px; left:-8px;">${prefix}11</div>`;
+            if (c === colSplit && r === 0) labelHtml = `<div class="block-label" style="top:-8px; left:-8px;">${prefix}12</div>`;
+            if (c === 0 && r === rowSplit) labelHtml = `<div class="block-label" style="bottom:-8px; left:-8px;">${prefix}21</div>`;
+            if (c === colSplit && r === rowSplit) labelHtml = `<div class="block-label" style="bottom:-8px; left:-8px;">${prefix}22</div>`;
+
+            html += `<div class="${cls}">${labelHtml}${fmtRat(mat[r][c])}</div>`;
+          }
+        }
+        
+        html += `</div>`;
+        html += `<div class="partition-bracket-right"></div>`;
+        html += `</div>`;
+        html += `</div>`;
+        return html;
+      }
+
+      // Function to render a matrix with brackets
+      function renderMatrixBrackets(mat, isResult = false) {
+        let html = `<div class="math-matrix">`;
+        html += `<div class="math-bracket">[</div>`;
+        html += `<div class="math-grid" style="grid-template-columns: repeat(${mat[0].length}, 1fr);">`;
+        for (let r = 0; r < mat.length; r++) {
+          for (let c = 0; c < mat[r].length; c++) {
+            const val = (typeof mat[r][c] === 'object') ? fmtRat(mat[r][c]) : mat[r][c];
+            html += `<div class="math-cell ${isResult ? 'math-result' : ''}">${val}</div>`;
+          }
+        }
+        html += `</div>`;
+        html += `<div class="math-bracket">]</div>`;
+        html += `</div>`;
+        return html;
+      }
+
+      function renderBlockMathHTML(blockObj) {
+        let html = `<div style="margin-bottom:2rem; padding-bottom:1.5rem; border-bottom:1px dashed #cbd5e1;">`;
+        html += `<div style="font-weight:700; color:#2563eb; margin-bottom:1rem; font-size:1.05rem;">${blockObj.label}</div>`;
+        
+        // If it's a multiplication block (has A and B)
+        if (blockObj.A && blockObj.B) {
+          html += `<div class="math-equation-row">`;
+          // Show A matrix
+          html += renderMatrixBrackets(blockObj.A);
+          html += `<div class="math-op">×</div>`;
+          // Show B matrix
+          html += renderMatrixBrackets(blockObj.B);
+          html += `<div class="math-eq">=</div>`;
+          // Show unsolved equations
+          html += renderMatrixBrackets(blockObj.eqs);
+          html += `<div class="math-eq">=</div>`;
+          // Show result
+          html += renderMatrixBrackets(blockObj.res, true);
+          html += `</div>`;
+        } else {
+          // Addition block
+          html += `<div class="math-equation-row">`;
+          // Show first block result
+          html += renderMatrixBrackets(blockObj.A, true);
+          html += `<div class="math-op">+</div>`;
+          // Show second block result
+          html += renderMatrixBrackets(blockObj.B, true);
+          html += `<div class="math-eq">=</div>`;
+          // Show addition expressions
+          html += renderMatrixBrackets(blockObj.eqs);
+          html += `<div class="math-eq">=</div>`;
+          // Show result
+          html += renderMatrixBrackets(blockObj.res, true);
+          html += `</div>`;
+        }
+        
+        html += `</div>`;
+        return html;
+      }
+
+      function renderFullMatrixHTML(mat, title) {
+        let html = `<div style="margin-bottom:1rem;">`;
+        if (title) html += `<div style="font-weight:700; color:#166534; margin-bottom:0.5rem; font-size:1.05rem;">${title}</div>`;
+        html += `<div class="matrix-display" style="gap:0.6rem;">`;
+        for (let r = 0; r < mat.length; r++) {
+          html += `<div class="matrix-row" style="gap:0.6rem;">`;
+          html += `<div class="matrix-values" style="gap:0.6rem;">`;
+          for (let c = 0; c < mat[r].length; c++) {
+            html += `<span class="matrix-cell" style="min-width: 60px; background:#dcfce7; border-color:#86efac; font-weight:700;">${fmtRat(mat[r][c])}</span>`;
+          }
+          html += `</div></div>`;
+        }
+        html += `</div></div>`;
+        return html;
+      }
+
+      resultsSection.innerHTML = '';
+
+      // Step 1: Partition Visuals
+      const step1 = document.createElement('div');
+      step1.className = 'step-card';
+      step1.innerHTML = `
+        <div class="step-header">
+          <span class="step-badge">STEP 1</span>
+          <span class="step-title">Partition Matrices into Blocks</span>
+        </div>
+        <div class="step-body" style="flex-direction: column; align-items: center; gap: 1.5rem;">
+          <div style="display:flex; gap:2rem; flex-wrap:wrap; justify-content:center; align-items:center;">
+            ${renderPartitionedHTML(A, midM, midN, 'A')}
+            <div style="font-size: 2rem; font-weight: bold; color: #64748b;">×</div>
+            ${renderPartitionedHTML(B, midN, midP, 'B')}
+          </div>
+          <div style="text-align:center; font-size:0.95rem; color:#334155; background:#f8fafc; padding:0.8rem 1.5rem; border-radius:1rem; border:1px dashed #cbd5e1;">
+            <b>Rules:</b> C<sub>11</sub> = (A<sub>11</sub>B<sub>11</sub>) + (A<sub>12</sub>B<sub>21</sub>), etc.
+          </div>
+        </div>
+      `;
+      resultsSection.appendChild(step1);
+
+      // Step 2: Block Multiplications (expanded)
+      const step2 = document.createElement('div');
+      step2.className = 'step-card';
+      let blocksHtml = `
+        <div class="step-header">
+          <span class="step-badge">STEP 2</span>
+          <span class="step-title">Compute Individual Block Products</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:1.5rem; margin-top:1rem; overflow-x:auto;">
+          ${renderBlockMathHTML(P1)}
+          ${renderBlockMathHTML(P2)}
+          ${renderBlockMathHTML(P3)}
+          ${renderBlockMathHTML(P4)}
+          ${renderBlockMathHTML(P5)}
+          ${renderBlockMathHTML(P6)}
+          ${renderBlockMathHTML(P7)}
+          ${renderBlockMathHTML(P8)}
+        </div>
+      `;
+      step2.innerHTML = blocksHtml;
+      resultsSection.appendChild(step2);
+
+      // Step 3: Final Assembly (with addition math)
+      const step3 = document.createElement('div');
+      step3.className = 'step-card';
+      let finalHtml = `
+        <div class="step-header">
+          <span class="step-badge">STEP 3</span>
+          <span class="step-title">Add Blocks to Form Final Matrix C</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:1.5rem; margin-top:1rem; overflow-x:auto;">
+          ${renderBlockMathHTML(C11)}
+          ${renderBlockMathHTML(C12)}
+          ${renderBlockMathHTML(C21)}
+          ${renderBlockMathHTML(C22)}
+          
+          <div style="margin-top: 1.5rem; border-top: 2px dashed #cbd5e1; padding-top: 1.5rem;">
+            ${renderFullMatrixHTML(C, 'Final Matrix C = A × B')}
+          </div>
+        </div>
+      `;
+      step3.innerHTML = finalHtml;
+      resultsSection.appendChild(step3);
+    }
+
+    // ---------- STANDARD SOLVER ----------
+    function buildCalcDetails(matrixBefore, pivotRow, targets, pivotCol, nCols) {
+      const blocks = [];
+      for (const { r, factor } of targets) {
+        const rowLabel = `R${r + 1} - (${fmtRat(factor)})·R${pivotRow + 1}`;
+        const details = [];
+        
+        for (let c = 0; c < nCols; c++) {
+          if (c === pivotCol) continue;
+          const originalVal = matrixBefore[r][c];
+          const pivotVal = matrixBefore[pivotRow][c];
+          const product = mulRat(factor, pivotVal);
+          const result = subRat(originalVal, product);
+          
+          if (ratIsZero(result)) continue;
+
+          const term1 = fmtRat(originalVal);
+          const term2 = `(${fmtRat(factor)} × ${fmtRat(pivotVal)})`;
+          const prodStr = fmtRat(product);
+          const resStr = fmtRat(result);
+          
+          let eq = `${term1} - ${term2} = ${term1} - ${prodStr.startsWith('-') ? '('+prodStr+')' : prodStr} = ${resStr}`;
+          if (ratIsZero(product)) eq = `${term1} - 0 = ${term1}`;
+          
+          details.push(eq);
+        }
+        
+        if (details.length > 0) {
+          blocks.push({ rowLabel, details });
+        }
+      }
+      return blocks;
+    }
+
     function solveMatrix() {
       try {
+        const method = getSelectedMethod();
+        if (method === 'product') {
+          solveProduct();
+          return;
+        }
+
         let M = readMatrix();
         if (M.length === 0) throw new Error('Matrix is empty');
         const nRows = currentRows;
         const nCols = currentCols;
 
-        const method = getSelectedMethod();
-
-        // ========== INVERSE METHOD (special path) ==========
         if (method === 'inverse') {
-          if (nRows !== nCols) {
-            throw new Error(`Inverse requires a square matrix. You gave ${nRows}×${nCols}.`);
-          }
+          if (nRows !== nCols) throw new Error(`Inverse requires a square matrix. You gave ${nRows}×${nCols}.`);
           solveInverse(M, nRows);
           return;
         }
 
-        const hasAugmented = (method === 'gaussElim' || method === 'gaussJordan');
+        const hasAugmented = (method === 'gaussElim' || method === 'gaussJordan' || method === 'consistency');
         const augCol = hasAugmented ? nCols - 1 : null;
         const coeffCols = hasAugmented ? nCols - 1 : nCols;
 
         const steps = [];
+        let stepCounter = 0;
+        
         function recordStep(title, mat, ops = null, extra = {}) {
+          stepCounter++;
           steps.push({
+            stepIndex: stepCounter,
             title,
             matrix: cloneMatrix(mat),
             ops: ops ? ops.map(x => Array.isArray(x) ? [...x] : x) : null,
@@ -686,7 +1364,6 @@
         let ops = new Array(nRows).fill('');
         recordStep('Initial matrix', M, ops);
 
-        // Helper: clear a column except the pivot row, batching all eliminations into ONE step.
         function eliminateColumn(mat, pivotRow, col, mode) {
           const targets = [];
           for (let r = 0; r < nRows; r++) {
@@ -698,6 +1375,7 @@
           }
           if (targets.length === 0) return null;
 
+          const matrixBefore = cloneMatrix(mat);
           const batchOps = new Array(nRows).fill('');
           for (const { r, factor } of targets) {
             for (let c = 0; c < nCols; c++) {
@@ -705,10 +1383,12 @@
             }
             batchOps[r] = `R${r + 1} - (${fmtRat(factor)})·R${pivotRow + 1}`;
           }
-          return batchOps;
+
+          const calcDetails = buildCalcDetails(matrixBefore, pivotRow, targets, col, nCols);
+          return { batchOps, calcDetails };
         }
 
-        // ---------- RANK METHOD ----------
+        // RANK
         if (method === 'rank') {
           let mat = cloneMatrix(M);
           let rank = 0;
@@ -719,9 +1399,7 @@
             let foundOne = false;
             for (let r = pivotRow; r < nRows; r++) {
               if (ratIsZero(mat[r][col])) continue;
-              if (ratEq(mat[r][col], makeRat(1n, 1n))) {
-                bestRow = r; foundOne = true; break;
-              }
+              if (ratEq(mat[r][col], makeRat(1n, 1n))) { bestRow = r; foundOne = true; break; }
               if (bestRow === -1) bestRow = r;
             }
             if (bestRow === -1) continue;
@@ -736,18 +1414,15 @@
 
             const pivotVal = mat[pivotRow][col];
             if (!ratEq(pivotVal, makeRat(1n, 1n))) {
-              for (let c = 0; c < nCols; c++) {
-                mat[pivotRow][c] = divRat(mat[pivotRow][c], pivotVal);
-              }
+              for (let c = 0; c < nCols; c++) mat[pivotRow][c] = divRat(mat[pivotRow][c], pivotVal);
               const newOps = new Array(nRows).fill('');
               newOps[pivotRow] = `R${pivotRow + 1} / (${fmtRat(pivotVal)})`;
-              recordStep(`Normalize R${pivotRow + 1}`, mat, newOps);
+              const calcDetails = [{ rowLabel: `R${pivotRow+1} / (${fmtRat(pivotVal)})`, details: Array.from({length: nCols}, (_, c) => `${fmtRat(mat[pivotRow][c])} (was divided by ${fmtRat(pivotVal)})`) }];
+              recordStep(`Normalize R${pivotRow + 1}`, mat, newOps, { calcDetails });
             }
 
-            const batchOps = eliminateColumn(mat, pivotRow, col, 'below');
-            if (batchOps) {
-              recordStep(`Eliminate below using R${pivotRow + 1}`, mat, batchOps);
-            }
+            const elimResult = eliminateColumn(mat, pivotRow, col, 'below');
+            if (elimResult) recordStep(`Eliminate below using R${pivotRow + 1}`, mat, elimResult.batchOps, { calcDetails: elimResult.calcDetails });
 
             rank++;
             pivotRow++;
@@ -757,16 +1432,105 @@
           return;
         }
 
-        // ---------- OTHER METHODS ----------
+        // CONSISTENCY
+        if (method === 'consistency') {
+           if (nRows < 1) throw new Error('Matrix cannot be empty');
+           const nVariables = coeffCols;
+           let matA = M.map(row => row.slice(0, nVariables));
+           let matAug = cloneMatrix(M);
+           
+           function computeRank(matrixToRank) {
+             let temp = cloneMatrix(matrixToRank);
+             let r = 0;
+             for (let c = 0; c < temp[0].length && r < temp.length; c++) {
+               let bestRow = -1;
+               for (let i = r; i < temp.length; i++) {
+                 if (!ratIsZero(temp[i][c])) { bestRow = i; break; }
+               }
+               if (bestRow === -1) continue;
+               [temp[r], temp[bestRow]] = [temp[bestRow], temp[r]];
+               let pVal = temp[r][c];
+               for (let j = 0; j < temp[0].length; j++) temp[r][j] = divRat(temp[r][j], pVal);
+               for (let i = 0; i < temp.length; i++) {
+                 if (i === r) continue;
+                 let f = temp[i][c];
+                 if (ratIsZero(f)) continue;
+                 for (let j = 0; j < temp[0].length; j++) temp[i][j] = subRat(temp[i][j], mulRat(f, temp[r][j]));
+               }
+               r++;
+             }
+             return r;
+           }
+
+           let rankA = computeRank(matA);
+           let rankAug = computeRank(matAug);
+           
+           let pivotRow = 0;
+           for (let col = 0; col < coeffCols && pivotRow < nRows; col++) {
+             let bestRow = -1;
+             let foundOne = false;
+             for (let r = pivotRow; r < nRows; r++) {
+               if (ratIsZero(matAug[r][col])) continue;
+               if (ratEq(matAug[r][col], makeRat(1n, 1n))) { bestRow = r; foundOne = true; break; }
+               if (bestRow === -1) bestRow = r;
+             }
+             if (bestRow === -1) continue;
+
+             if (bestRow !== pivotRow) {
+               [matAug[pivotRow], matAug[bestRow]] = [matAug[bestRow], matAug[pivotRow]];
+               const newOps = new Array(nRows).fill('');
+               newOps[pivotRow] = `R${pivotRow + 1} ↔ R${bestRow + 1}`;
+               newOps[bestRow] = `R${bestRow + 1} ↔ R${pivotRow + 1}`;
+               recordStep(`Swap R${pivotRow + 1} with R${bestRow + 1}`, matAug, newOps);
+             }
+
+             const pivotVal = matAug[pivotRow][col];
+             if (!ratEq(pivotVal, makeRat(1n, 1n))) {
+               for (let c = 0; c < nCols; c++) matAug[pivotRow][c] = divRat(matAug[pivotRow][c], pivotVal);
+               const newOps = new Array(nRows).fill('');
+               newOps[pivotRow] = `R${pivotRow + 1} / (${fmtRat(pivotVal)})`;
+               const calcDetails = [{ rowLabel: `R${pivotRow+1} / (${fmtRat(pivotVal)})`, details: Array.from({length: nCols}, (_, c) => `${fmtRat(matAug[pivotRow][c])} (was divided by ${fmtRat(pivotVal)})`) }];
+               recordStep(`Normalize R${pivotRow + 1}`, matAug, newOps, { calcDetails });
+             }
+
+             const elimResult = eliminateColumn(matAug, pivotRow, col, 'below');
+             if (elimResult) recordStep(`Eliminate below using R${pivotRow + 1}`, matAug, elimResult.batchOps, { calcDetails: elimResult.calcDetails });
+             pivotRow++;
+           }
+
+           displayStepsAndMessage(steps, null);
+
+           const msgBox = document.createElement('div');
+           msgBox.className = 'final-message';
+           if (rankA < rankAug) {
+             msgBox.classList.add('error');
+             msgBox.innerHTML = `<b>❌ Inconsistent System (No Solution)</b><br>Rank(A) = ${rankA} < Rank([A|B]) = ${rankAug}<br>The system has no solution.`;
+           } else if (rankA === rankAug && rankA === nVariables) {
+             msgBox.classList.add('success');
+             let solution = [];
+             for (let r = 0; r < nRows; r++) {
+               let pCol = -1;
+               for (let c = 0; c < coeffCols; c++) { if (!ratIsZero(matAug[r][c])) { pCol = c; break; } }
+               if (pCol !== -1) solution[pCol] = matAug[r][augCol];
+             }
+             let solStr = solution.map((v, i) => `x${i+1} = ${fmtRat(v || makeRat(0n,1n))}`).join(', ');
+             msgBox.innerHTML = `<b>✅ Consistent System with Unique Solution</b><br>Rank(A) = Rank([A|B]) = n = ${nVariables}<br>Solution: ${solStr}`;
+           } else if (rankA === rankAug && rankA < nVariables) {
+             msgBox.classList.add('warning');
+             msgBox.innerHTML = `<b>✅ Consistent System with Infinite Solutions</b><br>Rank(A) = Rank([A|B]) = ${rankA} < n = ${nVariables}<br>The system has infinitely many solutions (free variables exist).`;
+           }
+           resultsSection.appendChild(msgBox);
+           return;
+        }
+
+        // Echelon / RREF / Gauss
         let pivotRow = 0;
         for (let col = 0; col < coeffCols && pivotRow < nRows; col++) {
           let bestRow = -1;
           let foundOne = false;
           for (let r = pivotRow; r < nRows; r++) {
             if (ratIsZero(M[r][col])) continue;
-            if (ratEq(M[r][col], makeRat(1n, 1n))) {
-              bestRow = r; foundOne = true; break;
-            }
+            if (ratEq(M[r][col], makeRat(1n, 1n))) { bestRow = r; foundOne = true; break; }
             if (bestRow === -1) bestRow = r;
           }
           if (bestRow === -1) continue;
@@ -776,102 +1540,73 @@
             const newOps = new Array(nRows).fill('');
             newOps[pivotRow] = `R${pivotRow + 1} ↔ R${bestRow + 1}`;
             newOps[bestRow] = `R${bestRow + 1} ↔ R${pivotRow + 1}`;
-            const title = foundOne
-              ? `Swap R${pivotRow + 1} with R${bestRow + 1} (already has 1)`
-              : `Swap R${pivotRow + 1} with R${bestRow + 1}`;
+            const title = foundOne ? `Swap R${pivotRow + 1} with R${bestRow + 1} (already has 1)` : `Swap R${pivotRow + 1} with R${bestRow + 1}`;
             recordStep(title, M, newOps);
           }
 
           const pivotVal = M[pivotRow][col];
           if (!ratEq(pivotVal, makeRat(1n, 1n))) {
-            for (let c = 0; c < nCols; c++) {
-              M[pivotRow][c] = divRat(M[pivotRow][c], pivotVal);
-            }
+            for (let c = 0; c < nCols; c++) M[pivotRow][c] = divRat(M[pivotRow][c], pivotVal);
             const newOps = new Array(nRows).fill('');
             newOps[pivotRow] = `R${pivotRow + 1} / (${fmtRat(pivotVal)})`;
-            recordStep(`Normalize R${pivotRow + 1}`, M, newOps);
+            const calcDetails = [{ rowLabel: `R${pivotRow+1} / (${fmtRat(pivotVal)})`, details: Array.from({length: nCols}, (_, c) => `${fmtRat(M[pivotRow][c])} (was divided by ${fmtRat(pivotVal)})`) }];
+            recordStep(`Normalize R${pivotRow + 1}`, M, newOps, { calcDetails });
           }
 
           const mode = (method === 'echelon' || method === 'gaussElim') ? 'below' : 'all';
-          const batchOps = eliminateColumn(M, pivotRow, col, mode);
-          if (batchOps) {
-            const targetDesc = mode === 'below' ? 'below' : 'other rows';
-            recordStep(`Eliminate ${targetDesc} using R${pivotRow + 1}`, M, batchOps);
-          }
+          const elimResult = eliminateColumn(M, pivotRow, col, mode);
+          if (elimResult) recordStep(`Eliminate ${mode === 'below' ? 'below' : 'other rows'} using R${pivotRow + 1}`, M, elimResult.batchOps, { calcDetails: elimResult.calcDetails });
 
           pivotRow++;
         }
 
-        // ---------- FINAL MESSAGE ----------
         const finalMatrix = steps[steps.length - 1].matrix;
         let finalMsg = '';
-        let isError = false;
-
-        if (method === 'echelon') {
-          finalMsg = '✅ Echelon form achieved (zeros below pivots).';
-        } else if (method === 'reducedEchelon') {
-          finalMsg = '✅ Reduced Row Echelon Form (RREF) achieved.';
-        } else if (method === 'gaussJordan') {
+        if (method === 'echelon') finalMsg = '✅ Echelon form achieved (zeros below pivots).';
+        else if (method === 'reducedEchelon') finalMsg = '✅ Reduced Row Echelon Form (RREF) achieved.';
+        else if (method === 'gaussJordan') {
           const solution = [];
           let fullRank = true;
           for (let r = 0; r < nRows; r++) {
             let pivotCol = -1;
-            for (let c = 0; c < coeffCols; c++) {
-              if (!ratIsZero(finalMatrix[r][c])) { pivotCol = c; break; }
-            }
-            if (pivotCol === -1) {
-              if (!ratIsZero(finalMatrix[r][augCol])) fullRank = false;
-              continue;
-            }
+            for (let c = 0; c < coeffCols; c++) { if (!ratIsZero(finalMatrix[r][c])) { pivotCol = c; break; } }
+            if (pivotCol === -1) { if (!ratIsZero(finalMatrix[r][augCol])) fullRank = false; continue; }
             solution[pivotCol] = finalMatrix[r][augCol];
           }
           if (fullRank && solution.filter(v => v !== undefined).length === coeffCols) {
             finalMsg = `✅ Gauss-Jordan complete. Solution: ${solution.map((v, i) => `x${i + 1} = ${fmtRat(v || makeRat(0n,1n))}`).join(', ')}`;
-          } else {
-            finalMsg = '✅ Gauss-Jordan complete. (System may be inconsistent or have infinite solutions)';
-          }
+          } else finalMsg = '✅ Gauss-Jordan complete. (System may be inconsistent or have infinite solutions)';
         } else if (method === 'gaussElim') {
           try {
             const solution = backSubstitute(finalMatrix, augCol, coeffCols);
-            if (solution) {
-              finalMsg = `✅ Gauss Elimination complete. Solution: ${solution.map((v, i) => `x${i + 1} = ${fmtRat(v)}`).join(', ')}`;
-            } else {
-              finalMsg = '✅ Gauss Elimination complete (no unique solution).';
-            }
-          } catch (e) {
-            finalMsg = '✅ Gauss Elimination complete. (Could not compute solution)';
-          }
+            if (solution) finalMsg = `✅ Gauss Elimination complete. Solution: ${solution.map((v, i) => `x${i + 1} = ${fmtRat(v)}`).join(', ')}`;
+            else finalMsg = '✅ Gauss Elimination complete (no unique solution).';
+          } catch (e) { finalMsg = '✅ Gauss Elimination complete. (Could not compute solution)'; }
         }
 
-        displayStepsAndMessage(steps, finalMsg, isError);
+        displayStepsAndMessage(steps, finalMsg);
 
       } catch (err) {
         resultsSection.innerHTML = `<div class="error-msg">⚠️ ${err.message}</div>`;
       }
     }
 
-    // ---------- INVERSE SOLVER ----------
+    // INVERSE
     function solveInverse(M, n) {
-      // Build augmented [M | I]
       const aug = [];
       for (let r = 0; r < n; r++) {
         const row = [...M[r].map(c => ({ n: c.n, d: c.d }))];
-        for (let c = 0; c < n; c++) {
-          row.push(c === r ? makeRat(1n, 1n) : makeRat(0n, 1n));
-        }
+        for (let c = 0; c < n; c++) row.push(c === r ? makeRat(1n, 1n) : makeRat(0n, 1n));
         aug.push(row);
       }
 
       const totalCols = 2 * n;
       const steps = [];
-      function recordStep(title, mat, ops = null) {
-        steps.push({
-          title,
-          matrix: cloneMatrix(mat),
-          ops: ops ? ops.map(x => Array.isArray(x) ? [...x] : x) : null,
-          augIdx: n,                 // separator before column n
-          identityCols: new Set(Array.from({length: n}, (_, i) => i)) // highlight left n columns
-        });
+      let stepCounter = 0;
+      
+      function recordStep(title, mat, ops = null, extra = {}) {
+        stepCounter++;
+        steps.push({ stepIndex: stepCounter, title, matrix: cloneMatrix(mat), ops: ops ? ops.map(x => Array.isArray(x) ? [...x] : x) : null, augIdx: n, identityCols: new Set(Array.from({length: n}, (_, i) => i)), ...extra });
       }
 
       let ops = new Array(n).fill('');
@@ -879,7 +1614,6 @@
 
       let pivotRow = 0;
       for (let col = 0; col < n && pivotRow < n; col++) {
-        // Find best pivot in this column (prefer 1)
         let bestRow = -1;
         let foundOne = false;
         for (let r = pivotRow; r < n; r++) {
@@ -889,11 +1623,10 @@
         }
 
         if (bestRow === -1) {
-          // No pivot in this column — matrix is singular
           const msg = document.createElement('div');
           msg.className = 'final-message error';
-          msg.textContent = '❌ Matrix is singular (not invertible). A column has no pivot.';
-          displayStepsAndMessage(steps, null, false);
+          msg.textContent = '❌ Matrix is singular (not invertible).';
+          displayStepsAndMessage(steps, null);
           resultsSection.appendChild(msg);
           return;
         }
@@ -903,24 +1636,19 @@
           const newOps = new Array(n).fill('');
           newOps[pivotRow] = `R${pivotRow + 1} ↔ R${bestRow + 1}`;
           newOps[bestRow] = `R${bestRow + 1} ↔ R${pivotRow + 1}`;
-          const title = foundOne
-            ? `Swap R${pivotRow + 1} with R${bestRow + 1} (already has 1)`
-            : `Swap R${pivotRow + 1} with R${bestRow + 1}`;
+          const title = foundOne ? `Swap R${pivotRow + 1} with R${bestRow + 1} (already has 1)` : `Swap R${pivotRow + 1} with R${bestRow + 1}`;
           recordStep(title, aug, newOps);
         }
 
-        // Normalize pivot to 1
         const pivotVal = aug[pivotRow][col];
         if (!ratEq(pivotVal, makeRat(1n, 1n))) {
-          for (let c = 0; c < totalCols; c++) {
-            aug[pivotRow][c] = divRat(aug[pivotRow][c], pivotVal);
-          }
+          for (let c = 0; c < totalCols; c++) aug[pivotRow][c] = divRat(aug[pivotRow][c], pivotVal);
           const newOps = new Array(n).fill('');
           newOps[pivotRow] = `R${pivotRow + 1} / (${fmtRat(pivotVal)})`;
-          recordStep(`Normalize R${pivotRow + 1}`, aug, newOps);
+          const calcDetails = [{ rowLabel: `R${pivotRow+1} / (${fmtRat(pivotVal)})`, details: Array.from({length: totalCols}, (_, c) => `${fmtRat(aug[pivotRow][c])} (was divided by ${fmtRat(pivotVal)})`) }];
+          recordStep(`Normalize R${pivotRow + 1}`, aug, newOps, { calcDetails });
         }
 
-        // Eliminate all other rows (full RREF on the left half)
         const targets = [];
         for (let r = 0; r < n; r++) {
           if (r === pivotRow) continue;
@@ -929,20 +1657,19 @@
           targets.push({ r, factor });
         }
         if (targets.length > 0) {
+          const matrixBefore = cloneMatrix(aug);
           const batchOps = new Array(n).fill('');
           for (const { r, factor } of targets) {
-            for (let c = 0; c < totalCols; c++) {
-              aug[r][c] = subRat(aug[r][c], mulRat(factor, aug[pivotRow][c]));
-            }
+            for (let c = 0; c < totalCols; c++) aug[r][c] = subRat(aug[r][c], mulRat(factor, aug[pivotRow][c]));
             batchOps[r] = `R${r + 1} - (${fmtRat(factor)})·R${pivotRow + 1}`;
           }
-          recordStep(`Eliminate other rows using R${pivotRow + 1}`, aug, batchOps);
+          const calcDetails = buildCalcDetails(matrixBefore, pivotRow, targets, col, totalCols);
+          recordStep(`Eliminate other rows using R${pivotRow + 1}`, aug, batchOps, { calcDetails });
         }
 
         pivotRow++;
       }
 
-      // Verify left side is identity
       let isIdentity = true;
       for (let r = 0; r < n; r++) {
         for (let c = 0; c < n; c++) {
@@ -952,87 +1679,45 @@
         if (!isIdentity) break;
       }
 
-      // Display
-      resultsSection.innerHTML = '';
-      for (let i = 0; i < steps.length; i++) {
-        const step = steps[i];
-        const card = document.createElement('div');
-        card.className = 'step-card';
-
-        const header = document.createElement('div');
-        header.className = 'step-header';
-        const badge = document.createElement('span');
-        badge.className = 'step-badge';
-        badge.textContent = `STEP ${i + 1}`;
-        const title = document.createElement('span');
-        title.className = 'step-title';
-        title.textContent = step.title;
-        header.appendChild(badge);
-        header.appendChild(title);
-        card.appendChild(header);
-
-        card.appendChild(renderMatrixWithOps(step.matrix, step.ops, step.augIdx, step.identityCols));
-        resultsSection.appendChild(card);
-      }
-
-      // Final: show inverse
-      const finalMsg = document.createElement('div');
-      finalMsg.className = 'final-message';
-      if (isIdentity) {
-        finalMsg.textContent = '✅ Inverse computed! The right side of the final augmented matrix is A⁻¹.';
-      } else {
-        finalMsg.textContent = '⚠️ Left side did not reduce to identity exactly (check for numerical issues).';
-      }
-      resultsSection.appendChild(finalMsg);
+      displayStepsAndMessage(steps, isIdentity ? '✅ Inverse computed! The right side of the final augmented matrix is A⁻¹.' : '⚠️ Left side did not reduce to identity exactly.');
 
       if (isIdentity) {
-        // Build clean inverse matrix display
         const invBox = document.createElement('div');
         invBox.className = 'inv-result-box';
-        const invTitle = document.createElement('div');
-        invTitle.className = 'inv-result-title';
-        invTitle.textContent = '📌 Inverse Matrix A⁻¹';
-        invBox.appendChild(invTitle);
-
+        invBox.innerHTML = '<div class="inv-result-title">📌 Inverse Matrix A⁻¹</div>';
         const invMat = [];
         for (let r = 0; r < n; r++) {
           const row = [];
           for (let c = 0; c < n; c++) row.push(aug[r][n + c]);
           invMat.push(row);
         }
-        const invDisplay = renderMatrixWithOps(invMat, null, null, null);
+        const invDisplay = document.createElement('div');
+        invDisplay.className = 'matrix-display';
+        for (let r = 0; r < n; r++) {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = 'matrix-row';
+          const valsDiv = document.createElement('div');
+          valsDiv.className = 'matrix-values';
+          for (let c = 0; c < n; c++) {
+            const cell = document.createElement('span');
+            cell.className = 'matrix-cell';
+            cell.textContent = fmtRat(invMat[r][c]);
+            valsDiv.appendChild(cell);
+          }
+          rowDiv.appendChild(valsDiv);
+          invDisplay.appendChild(rowDiv);
+        }
         invBox.appendChild(invDisplay);
         resultsSection.appendChild(invBox);
       }
     }
 
-    // Helper to render steps + final message
-    function displayStepsAndMessage(steps, finalMsg, isError = false) {
+    function displayStepsAndMessage(steps, finalMsg) {
       resultsSection.innerHTML = '';
-      for (let i = 0; i < steps.length; i++) {
-        const step = steps[i];
-        const card = document.createElement('div');
-        card.className = 'step-card';
-
-        const header = document.createElement('div');
-        header.className = 'step-header';
-        const badge = document.createElement('span');
-        badge.className = 'step-badge';
-        badge.textContent = `STEP ${i + 1}`;
-        const title = document.createElement('span');
-        title.className = 'step-title';
-        title.textContent = step.title;
-        header.appendChild(badge);
-        header.appendChild(title);
-        card.appendChild(header);
-
-        card.appendChild(renderMatrixWithOps(step.matrix, step.ops, step.augIdx, step.identityCols || null));
-        resultsSection.appendChild(card);
-      }
-
+      for (let i = 0; i < steps.length; i++) resultsSection.appendChild(renderStep(steps[i]));
       if (finalMsg) {
         const msg = document.createElement('div');
-        msg.className = 'final-message' + (isError ? ' error' : '');
+        msg.className = 'final-message';
         msg.textContent = finalMsg;
         resultsSection.appendChild(msg);
       }
@@ -1045,33 +1730,22 @@
 
       for (let i = 0; i < rows; i++) {
         let pivotCol = -1;
-        for (let c = 0; c < coeffCols; c++) {
-          if (!ratIsZero(mat[i][c])) { pivotCol = c; break; }
-        }
-        if (pivotCol === -1) {
-          if (!ratIsZero(mat[i][augCol])) throw new Error('Inconsistent system');
-          continue;
-        }
+        for (let c = 0; c < coeffCols; c++) { if (!ratIsZero(mat[i][c])) { pivotCol = c; break; } }
+        if (pivotCol === -1) { if (!ratIsZero(mat[i][augCol])) throw new Error('Inconsistent system'); continue; }
         isPivot[pivotCol] = true;
       }
 
       for (let i = rows - 1; i >= 0; i--) {
         let pivotCol = -1;
-        for (let c = 0; c < coeffCols; c++) {
-          if (!ratIsZero(mat[i][c])) { pivotCol = c; break; }
-        }
+        for (let c = 0; c < coeffCols; c++) { if (!ratIsZero(mat[i][c])) { pivotCol = c; break; } }
         if (pivotCol === -1) continue;
 
         let sum = mat[i][augCol];
-        for (let c = pivotCol + 1; c < coeffCols; c++) {
-          sum = subRat(sum, mulRat(mat[i][c], x[c]));
-        }
+        for (let c = pivotCol + 1; c < coeffCols; c++) sum = subRat(sum, mulRat(mat[i][c], x[c]));
         x[pivotCol] = divRat(sum, mat[i][pivotCol]);
       }
 
-      for (let c = 0; c < coeffCols; c++) {
-        if (!isPivot[c]) return null;
-      }
+      for (let c = 0; c < coeffCols; c++) if (!isPivot[c]) return null;
       return x;
     }
 
@@ -1079,33 +1753,39 @@
     setOrderBtn.addEventListener('click', () => {
       const r = parseInt(rowsInput.value, 10);
       const c = parseInt(colsInput.value, 10);
-      if (isNaN(r) || r < 1 || r > 8 || isNaN(c) || c < 1 || c > 8) {
+      const cb = parseInt(colsBInput.value, 10);
+      
+      const method = getSelectedMethod();
+      const isProduct = (method === 'product');
+      
+      if (isNaN(r) || r < 1 || r > 8 || isNaN(c) || c < 1 || c > 8 || (isProduct && (isNaN(cb) || cb < 1 || cb > 8))) {
         alert('Rows and columns must be between 1 and 8.');
         return;
       }
-      const method = getSelectedMethod();
-      const showAugSep = (method === 'gaussElim' || method === 'gaussJordan');
-      generateMatrixInput(r, c, false, showAugSep);
+      
+      const showAugSep = (method === 'gaussElim' || method === 'gaussJordan' || method === 'consistency');
+      generateMatrixInput(r, c, isProduct ? cb : 0, false, showAugSep);
       resultsSection.innerHTML = '<div class="text-muted">Enter matrix values and choose a method.</div>';
     });
 
     exampleBtn.addEventListener('click', () => {
       rowsInput.value = 3;
       colsInput.value = 4;
+      colsBInput.value = 4;
       const method = getSelectedMethod();
-      const showAugSep = (method === 'gaussElim' || method === 'gaussJordan');
-      generateMatrixInput(3, 4, true, showAugSep, 'default');
+      const isProduct = (method === 'product');
+      const showAugSep = (method === 'gaussElim' || method === 'gaussJordan' || method === 'consistency');
+      generateMatrixInput(3, 4, isProduct ? 4 : 0, true, showAugSep, 'default');
       resultsSection.innerHTML = '<div class="text-muted">Example loaded. Choose method and solve.</div>';
     });
 
     exampleInvBtn.addEventListener('click', () => {
       rowsInput.value = 3;
       colsInput.value = 3;
-      // Force 'inverse' method selection
-      for (const radio of methodRadios) {
-        if (radio.value === 'inverse') radio.checked = true;
-      }
-      generateMatrixInput(3, 3, true, false, 'inverse');
+      colsBInput.value = 3;
+      for (const radio of methodRadios) { if (radio.value === 'inverse') radio.checked = true; }
+      updateInputVisibility();
+      generateMatrixInput(3, 3, 0, true, false, 'inverse');
       resultsSection.innerHTML = '<div class="text-muted">Inverse demo loaded (3×3). Click Solve.</div>';
     });
 
@@ -1118,14 +1798,15 @@
 
     methodRadios.forEach(radio => {
       radio.addEventListener('change', () => {
-        // If user picks inverse but matrix isn't square, refresh input grid size hint is fine;
-        // We only toggle the augmented separator here.
+        updateInputVisibility();
         refreshInputGridForMethod();
+        resultsSection.innerHTML = '<div class="text-muted">Mode changed. Adjust grid and solve.</div>';
       });
     });
 
     // Initialize
-    generateMatrixInput(3, 3, false, false);
+    updateInputVisibility();
+    generateMatrixInput(3, 3, 3, false, false);
   })();
 </script>
 </body>
