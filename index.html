@@ -185,6 +185,7 @@
       margin-bottom: 1.5rem;
       border: 1px solid #e2e8f0;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      overflow-x: auto; /* Allows horizontal scroll on mobile */
     }
     .step-header {
       display: flex;
@@ -217,10 +218,9 @@
       display: flex;
       flex-direction: column;
       gap: 0.7rem;
-      overflow-x: auto;
       padding: 0.3rem 0;
       flex: 1;
-      min-width: 300px;
+      min-width: max-content; /* Prevents breaking matrix layout */
     }
     .calc-details {
       flex: 1;
@@ -271,17 +271,19 @@
       word-break: break-all;
     }
     
+    /* FIXED: Mobile Row Alignment */
     .matrix-row {
       display: flex;
       align-items: center;
       gap: 1.5rem;
-      flex-wrap: wrap;
+      flex-wrap: nowrap; /* Prevent operation from dropping below */
     }
     .matrix-values {
       display: flex;
       gap: 0.6rem;
       align-items: center;
-      flex-wrap: wrap;
+      flex-wrap: nowrap; /* Keep cells in one line */
+      flex-shrink: 0;
     }
     .matrix-cell {
       min-width: 60px;
@@ -321,9 +323,10 @@
       padding: 0.35rem 1rem;
       border-radius: 2rem;
       font-size: 0.85rem;
-      white-space: nowrap;
+      white-space: nowrap; /* Prevent text from wrapping */
       border: 1px solid #fde047;
       margin-left: 0.5rem;
+      flex-shrink: 0;
     }
     .op-statement.empty {
       background: transparent;
